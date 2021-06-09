@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react"
-import uniqid from 'uniqid'
+import uniqid from 'uniqid' 
 
 const ListaNombres = () => {
   const [nombre, setNombre] = useState('')
@@ -9,9 +9,13 @@ const ListaNombres = () => {
     const nombreUnico = {
       id: uniqid(),
       nombre:nombre
-
     }
     setListaNombres([...listaNombres, nombreUnico]) //spread operator instead of concat method
+    setNombre('')    
+  }
+  function deleteNombre(id) {
+    const arrMenosUno = listaNombres.filter( item => item.id !== id)
+    setListaNombres(arrMenosUno)
   }
   return (
     <Fragment>
@@ -19,15 +23,26 @@ const ListaNombres = () => {
       <div className="row">
         <div className="col">
           <h4>Listado de nombres</h4>
+          <ul className="list-group">            
+              {
+              listaNombres.map(item => 
+                <li key={item.id} className="list-group-item">{item.nombre} 
+                <button onClick={ () => deleteNombre(item.id)} className="btn btn-sm btn-danger float-end">X</button>
+                </li>)
+
+              }
+          </ul>
         </div>
         <div className="col">
           <h4>Formulario para añadir nombres</h4>
-          <form onSubmit={(e) => addNombre(e)} addclassName="form-group">
+          <form onSubmit={(e) => addNombre(e)} className="form-group">
             <input
-              onChange={(e) => {setNombre(e.target.value)}}
-              className="form-control mt-2"
+              onChange={(e) => setNombre(e.target.value)}
+              className="form-control mt-2"         
+              id="input"     
               type="text"
               placeholder="Introduce el nombre"
+              value={nombre}
             />
             <div className="d-grid">
               <input                
